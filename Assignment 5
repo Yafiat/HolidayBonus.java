@@ -1,0 +1,69 @@
+package holidayBonus.java;
+ 
+public class HolidayBonus {
+ 
+    // Constants for bonus amounts
+    private static final double HIGHEST_SALES_BONUS = 5000;
+    private static final double LOWEST_SALES_BONUS = 1000;
+    private static final double OTHER_STORES_BONUS = 2000;
+ 
+    /**
+     * Calculates the holiday bonus for each store based on the sales data.
+     *
+     * @param salesData the sales data in a 2D ragged array.
+     * @return an array of bonuses for each store.
+     */
+    public static double[] calculateHolidayBonus(double[][] salesData) {
+        double[] bonuses = new double[salesData.length];
+ 
+        // Calculate bonus for each store
+        for (int i = 0; i < salesData.length; i++) {
+            double totalSales = 0;
+            for (double sale : salesData[i]) {
+                totalSales += sale;
+            }
+ 
+            if (totalSales <= 0) {
+                bonuses[i] = 0; // No bonus for stores with no sales or negative sales
+            } else {
+                double highestSales = Double.NEGATIVE_INFINITY;
+                double lowestSales = Double.POSITIVE_INFINITY;
+                for (int j = 0; j < salesData.length; j++) {
+                    double rowTotal = 0;
+                    for (double sale : salesData[j]) {
+                        rowTotal += sale;
+                    }
+ 
+                    highestSales = Math.max(highestSales, rowTotal);
+                    lowestSales = Math.min(lowestSales, rowTotal);
+                }
+ 
+                if (totalSales == highestSales) {
+                    bonuses[i] = HIGHEST_SALES_BONUS;
+                } else if (totalSales == lowestSales) {
+                    bonuses[i] = LOWEST_SALES_BONUS;
+                } else {
+                    bonuses[i] = OTHER_STORES_BONUS;
+                }
+            }
+        }
+ 
+        return bonuses;
+    }
+ 
+    /**
+     * Calculates the total holiday bonuses for all stores.
+     *
+     * @param salesData the sales data in a 2D ragged array.
+     * @return the total holiday bonus amount.
+     */
+    public static double calculateTotalHolidayBonus(double[][] salesData) {
+        double[] bonuses = calculateHolidayBonus(salesData);
+        double totalBonus = 0;
+        for (double bonus : bonuses) {
+            totalBonus += bonus;
+        }
+        return totalBonus;
+    }
+}
+ 
